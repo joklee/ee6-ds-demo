@@ -23,18 +23,24 @@
 http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
 
-    <persistence-unit name="demoApplicationPU" transaction-type="JTA" >
+    <persistence-unit name="demoApplicationPU" transaction-type="RESOURCE_LOCAL" >
 
         <class>org.os890.demo.ee6.ds.domain.AbstractDomainObject</class>
         <class>org.os890.demo.ee6.ds.domain.user.User</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
+<!--
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+-->
+
+<!-- TODO remove
         <properties>
             <property name="openjpa.DataCache" value="true"/>
             <property name="openjpa.DynamicEnhancementAgent" value="true"/>
             <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
             <property name="openjpa.jdbc.QuerySQLCache" value="true(EnableStatistics=true)"/>
         </properties>
+-->
     </persistence-unit>
 </persistence>

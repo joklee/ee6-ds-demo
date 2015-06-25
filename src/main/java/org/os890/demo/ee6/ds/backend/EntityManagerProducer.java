@@ -18,18 +18,37 @@
  */
 package org.os890.demo.ee6.ds.backend;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import org.apache.deltaspike.jpa.api.entitymanager.PersistenceUnitName;
 
-//optional: @ApplicationScoped
+
+@ApplicationScoped
 public class EntityManagerProducer {
 
-    @PersistenceContext(unitName = "demoApplicationPU")
-    private EntityManager entityManagerProxy;
+    // nur mal als schneller hack:
+    // spaeter dann mal mit zB
+    // @PersistenceUnit(unitName = "demoApplicationPU")
+    // private EntityManagerFactory entityManagerFactory;
+    //
+    @Inject
+    @PersistenceUnitName("demoApplicationPU")
+    private EntityManagerFactory emf;
 
     @Produces
-    public EntityManager exposeDependentEntityManager() {
-        return entityManagerProxy;
+    @RequestScoped
+    public EntityManager getEm() {
+        return emf.createEntityManager();
+    }
+
+    public void closeEm(@Disposes EntityManager em) {
+        if (em.isOpen()) {
+            em.close();
+        }
     }
 }
